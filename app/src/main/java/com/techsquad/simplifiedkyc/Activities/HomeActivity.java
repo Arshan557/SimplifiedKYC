@@ -1,20 +1,31 @@
 package com.techsquad.simplifiedkyc.Activities;
 
+import android.Manifest;
+import android.app.KeyguardManager;
+import android.content.pm.PackageManager;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.techsquad.simplifiedkyc.FingerPrintHandler;
 import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.R2;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.security.KeyStore;
+
+import javax.crypto.Cipher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +37,11 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R2.id.btn_submit) MaterialButton btn_submit;
 
     String aadhar = null;
+    private KeyStore keyStore;
+    // Variable used for storing the key in the Android Keystore container
+    private static final String KEY_NAME = "kyc";
+    private Cipher cipher;
+    private TextView textView;
 
     private static final int CARD_NUMBER_TOTAL_SYMBOLS = 14; // size of pattern 0000-0000-0000
     private static final int CARD_NUMBER_TOTAL_DIGITS = 12; // max numbers of digits in pattern: 0000 x 3
@@ -38,6 +54,41 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        // Initializing both Android Keyguard Manager and Fingerprint Manager
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+
+        // Check whether the device has a Fingerprint sensor.
+        if(!fingerprintManager.isHardwareDetected()){
+            Toast.makeText(getBaseContext(),  " Your mobile doesn't have fingerprint sensor", Toast.LENGTH_LONG).show();
+        } else {
+            // Checks whether fingerprint permission is set on manifest
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getBaseContext(),  " Fingerprint permission not enabled", Toast.LENGTH_LONG).show();
+            }else{
+                // Check whether at least one fingerprint is registered
+                if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    //textView.setText("Register at least one fingerprint in Settings");
+                    Toast.makeText(getBaseContext(),  " Register at least one fingerprint in Settings", Toast.LENGTH_LONG).show();
+                }else{
+                    // Checks whether lock screen security is enabled or not
+                    if (!keyguardManager.isKeyguardSecure()) {
+                        //textView.setText("Lock screen security not enabled in Settings");
+                        Toast.makeText(getBaseContext(),  " Lock screen security not enabled in Settings", Toast.LENGTH_LONG).show();
+                    }else{
+                        //generateKey();
+                        //if (cipherInit()) {
+                        if (true) {
+                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                            FingerPrintHandler helper = new FingerPrintHandler(this);
+                            helper.startAuth(fingerprintManager, cryptoObject);
+                        }
+                    }
+                }
+            }
+        }
+
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
