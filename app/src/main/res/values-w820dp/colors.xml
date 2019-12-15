@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#008577</color>
+  <color name="colorPrimaryDark">#00574B</color>
+  <color name="colorAccent">#D81B60</color>
+  <color name="primary">#FFFFFF</color>
+  <color name="primary_dark">#00897b</color>
+  <color name="primary_darker">#00796b</color>
+  <color name="white">#FFFFFF</color>
+  <color name="accent">#FFFFFF</color>
+  <color name="aluminum">#999999</color>
+  <color name="colorGray">#D0D0D0</color>
+
+</resources>
