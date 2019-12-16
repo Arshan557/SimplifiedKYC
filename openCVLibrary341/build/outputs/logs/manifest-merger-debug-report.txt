@@ -1,0 +1,41 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:1-10:12
+	package
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:3:7-27
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:5:7-34
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:4:7-33
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+	android:targetSdkVersion
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:15-44
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:7:5-47
+		INJECTED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml
+uses-permission#android.permission.CAMERA
+ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:9:5-65
+	android:name
+		ADDED from /Users/arshan/AndroidStudioProjects/SimplifiedKYC/openCVLibrary341/src/main/AndroidManifest.xml:9:22-62

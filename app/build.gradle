@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion '28'
-    buildToolsVersion '28.1.2'
+    compileSdkVersion 28
+    //buildToolsVersion '28.1.2'
 
     defaultConfig {
         applicationId "com.techsquad.simplifiedkyc"
