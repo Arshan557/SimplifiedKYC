@@ -11,7 +11,7 @@ import androidx.core.app.ActivityCompat;
 
 /**
  * Created by whit3hawks on 11/16/16.
- */
+ **/
 public class FingerPrintHandler extends FingerprintManager.AuthenticationCallback {
 
 
