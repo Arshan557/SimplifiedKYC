@@ -47,12 +47,13 @@
 
 
         <ImageView
+            android:id="@+id/irisImage"
             android:layout_width="200dp"
             android:layout_height="307dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:layout_weight="3"
-            android:src="@drawable/ic_action_fingerprint" />
+            android:src="@drawable/iris" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit"

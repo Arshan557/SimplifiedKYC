@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Simplified KYC</string>
     <string name="terms">By signing up, you agree to Simplified KYC\'s Terms and Conditions, and Privacy Policy</string>
-    <string name="placeFinger">Please enter your Aadhar number and place your your finger on fingerprint scanner and proceed.</string>
+    <string name="placeFinger">Please enter your Aadhar number and click below image to scan IRIS and proceed.</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_login_activities">LoginActivities</string>

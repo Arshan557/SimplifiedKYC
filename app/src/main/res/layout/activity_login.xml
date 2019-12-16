@@ -7,106 +7,118 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/topLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
-        android:id="@+id/topLinear"
-        android:paddingLeft="24dp"
         android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:paddingLeft="24dp"
+        android:paddingTop="16dp"
         android:paddingRight="24dp">
 
-        <ImageView android:src="@drawable/ic_launcher_green"
+        <ImageView
             android:layout_width="@dimen/logo_dimen"
             android:layout_height="@dimen/logo_dimen"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:src="@drawable/ic_launcher_green" />
 
         <!--  Email Label -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_email"
+
+            <EditText
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Password Label -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_password"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <CheckBox
+                android:id="@+id/rememberCheck"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rememberCheck"/>
+                android:layout_height="wrap_content" />
+
             <TextView
+                android:id="@+id/remember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/remember"
-                android:text="Remember password"/>
+                android:text="Remember password" />
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
             android:text="Login"
-            android:id="@+id/btn_login"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:cornerRadius="10dp"
+            android:theme="@style/AppThemeButton"
             app:backgroundTint="#3f974b"
             app:backgroundTintMode="multiply"
-            app:rippleColor="#ffee33"
-            android:theme="@style/AppThemeButton"
-            app:strokeColor="#8edea7"
-            app:strokeWidth="2dp"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:rippleColor="#ffee33"
+            app:strokeColor="#8edea7"
+            app:strokeWidth="2dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
-            <TextView android:id="@+id/forgot_pwd"
+
+            <TextView
+                android:id="@+id/forgot_pwd"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:text="Forgot password?"
-                android:textSize="16dip"/>
+                android:textSize="16dip" />
+
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
                 android:text=" | "
-                android:textStyle="bold"
-                android:textSize="20dip"/>
-            <TextView android:id="@+id/link_signup"
+                android:textSize="20dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/link_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:text="New user? Sign up"
-                android:textSize="16dip"/>
+                android:textSize="16dip" />
         </LinearLayout>
 
     </LinearLayout>

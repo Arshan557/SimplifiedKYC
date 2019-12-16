@@ -1,25 +1,18 @@
 package com.techsquad.simplifiedkyc.Activities;
 
-import android.Manifest;
-import android.app.KeyguardManager;
-import android.content.pm.PackageManager;
-import android.hardware.fingerprint.FingerprintManager;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.techsquad.simplifiedkyc.FingerPrintHandler;
 import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.R2;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +28,10 @@ public class HomeActivity extends AppCompatActivity {
 
     @BindView(R2.id.aadharNumberEditText) EditText aadharNumber;
     @BindView(R2.id.btn_submit) MaterialButton btn_submit;
+    @BindView(R2.id.irisImage) ImageView irisImage;
 
-    String aadhar = null;
+    String aadharNum = "";
+    String irisData = "";
     private KeyStore keyStore;
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "kyc";
@@ -55,8 +50,13 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
+        Bundle b = getIntent().getExtras();
+        if(b != null && !b.isEmpty()) {
+            String irisData = b.getString("irisData");
+        }
+
         // Initializing both Android Keyguard Manager and Fingerprint Manager
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+        /*KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
         FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
         // Check whether the device has a Fingerprint sensor.
@@ -87,8 +87,17 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
             }
-        }
+        }*/
 
+        irisImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, SplashActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                //finish();
+            }
+        });
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +108,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void submitDetails() {
-        aadhar = aadharNumber.getText().toString();
-        Toast.makeText(getBaseContext(), aadhar + " will be submitted shortly", Toast.LENGTH_LONG).show();
+        aadharNum = aadharNumber.getText().toString();
+        Toast.makeText(getBaseContext(), aadharNum + " and " + irisData + " will be submitted shortly", Toast.LENGTH_LONG).show();
+        /*Intent i = new Intent(HomeActivity.this, SplashActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        finish();*/
     }
 
     @OnTextChanged(value = R.id.aadharNumberEditText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)

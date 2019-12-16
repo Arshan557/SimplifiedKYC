@@ -21,23 +21,9 @@
             android:layout_marginBottom="14dp"
             android:layout_gravity="center_horizontal" />
 
-        <!-- Name Label -->
-        <!--<android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/aluminum"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Name" />
-        </android.support.design.widget.TextInputLayout>-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/aluminum"
             android:layout_marginTop="8dp">
             <EditText android:id="@+id/input_name"
                 android:layout_width="match_parent"
@@ -46,23 +32,9 @@
                 android:hint="Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  Email Label -->
-       <!-- <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/aluminum"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email" />
-        </android.support.design.widget.TextInputLayout>-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/aluminum"
             android:layout_marginTop="8dp">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
@@ -71,24 +43,9 @@
                 android:hint="Email" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <!-- mobile number -->
-        <!--<android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/aluminum"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_mobile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Mobile Number" />
-        </android.support.design.widget.TextInputLayout>-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/aluminum"
             android:layout_marginTop="8dp">
             <EditText android:id="@+id/input_mobile"
                 android:layout_width="match_parent"
@@ -97,23 +54,9 @@
                 android:hint="Mobile Number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password Label -->
-        <!--<android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/aluminum"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Password"/>
-        </android.support.design.widget.TextInputLayout>-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/aluminum"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp">
             <EditText android:id="@+id/input_password"
@@ -123,23 +66,9 @@
                 android:hint="Password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password Re-enter Label -->
-        <!--<android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/aluminum"
-            android:layout_marginTop="8dp">
-            <EditText android:id="@+id/input_reEnterPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:hint="Re-enter Password"/>
-        </android.support.design.widget.TextInputLayout>-->
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/aluminum"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp">
             <EditText android:id="@+id/input_reEnterPassword"
@@ -148,16 +77,6 @@
                 android:inputType="textPassword"
                 android:hint="Re-enter Password"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Signup Button -->
-        <!--<android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            android:text="Create Account"/>-->
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -185,7 +104,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:textColor="@color/white"
-            android:text="Already a member? Login"
+            android:text="Already a member? Login here"
+            android:textStyle="bold"
             android:gravity="center"
             android:textSize="16dip"/>
 
