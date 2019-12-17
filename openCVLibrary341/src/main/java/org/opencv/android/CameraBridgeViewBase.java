@@ -14,7 +14,9 @@ import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -49,6 +51,7 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     protected int mCameraIndex = CAMERA_ID_ANY;
     protected boolean mEnabled;
     protected FpsMeter mFpsMeter = null;
+    private final Matrix mMatrix = new Matrix();
 
     public static final int CAMERA_ID_ANY = -1;
     public static final int CAMERA_ID_BACK = 99;
@@ -410,7 +413,7 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
         if (modified != null) {
             try {
                 Utils.matToBitmap(modified, mCacheBitmap);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 Log.e(TAG, "Mat type: " + modified);
                 Log.e(TAG, "Bitmap type: " + mCacheBitmap.getWidth() + "*" + mCacheBitmap.getHeight());
                 Log.e(TAG, "Utils.matToBitmap() throws an exception: " + e.getMessage());
@@ -420,31 +423,30 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
 
         if (bmpValid && mCacheBitmap != null) {
             Canvas canvas = getHolder().lockCanvas();
-            // Rotate canvas to 90 degrees
-            canvas.rotate(0, canvas.getWidth() / 2, canvas.getHeight() / 2);
             if (canvas != null) {
+                int saveCount = canvas.save();
+                canvas.setMatrix(mMatrix);
+
+                mScale = Math.max((float) canvas.getHeight() / mCacheBitmap.getWidth(), (float) canvas.getWidth() / mCacheBitmap.getHeight());
+
+
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "mStretch value: " + mScale);
-
-
-                // Resize
-                Bitmap bitmap = Bitmap.createScaledBitmap(mCacheBitmap, canvas.getHeight(), canvas.getWidth(), true);
+                Log.d(TAG, "mStretch value: " + mScale);
 
                 if (mScale != 0) {
-                // Use bitmap instead of mCacheBitmap
-                    canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
-                            new Rect((canvas.getWidth() - bitmap.getWidth()) / 2,
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2,
-                                    (canvas.getWidth() - bitmap.getWidth()) / 2 + bitmap.getWidth(),
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2 + bitmap.getHeight()), null);
+                    canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
+                            new Rect((int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2),
+                                    (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2),
+                                    (int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2 + mScale*mCacheBitmap.getWidth()),
+                                    (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2 + mScale*mCacheBitmap.getHeight())), null);
                 } else {
-                    canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
-                            new Rect((canvas.getWidth() - bitmap.getWidth()) / 2,
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2,
-                                    (canvas.getWidth() - bitmap.getWidth()) / 2 + bitmap.getWidth(),
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2 + bitmap.getHeight()), null);
+                    canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
+                            new Rect((canvas.getWidth() - mCacheBitmap.getWidth()) / 2,
+                                    (canvas.getHeight() - mCacheBitmap.getHeight()) / 2,
+                                    (canvas.getWidth() - mCacheBitmap.getWidth()) / 2 + mCacheBitmap.getWidth(),
+                                    (canvas.getHeight() - mCacheBitmap.getHeight()) / 2 + mCacheBitmap.getHeight()), null);
                 }
+                canvas.restoreToCount(saveCount);
 
                 if (mFpsMeter != null) {
                     mFpsMeter.measure();
@@ -454,6 +456,38 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
             }
         }
     }
+
+    //added updateMatrix method
+    private void updateMatrix() {
+        float hw = this.getWidth() / 2.0f;
+        float hh = this.getHeight() / 2.0f;
+        boolean isFrontCamera = Camera.CameraInfo.CAMERA_FACING_FRONT == mCameraIndex;
+        mMatrix.reset();
+        if (isFrontCamera) {
+            mMatrix.preScale(-1, 1, hw, hh);
+        }
+        mMatrix.preTranslate(hw, hh);
+        if (isFrontCamera)
+            mMatrix.preRotate(270);
+        else
+            mMatrix.preRotate(90);
+        mMatrix.preTranslate(-hw, -hh);
+    }
+
+    //then We need call updateMatrix on layout
+    @Override
+    public void layout(int l, int t, int r, int b) {
+        super.layout(l, t, r, b);
+        updateMatrix();
+    }
+
+    //I think we should also call updateMatrix on measure
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        updateMatrix();
+    }
+
 
     /**
      * This method is invoked shall perform concrete operation to initialize the camera.
