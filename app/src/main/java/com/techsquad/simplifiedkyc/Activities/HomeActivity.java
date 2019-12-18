@@ -1,6 +1,7 @@
 package com.techsquad.simplifiedkyc.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.button.MaterialButton;
@@ -8,6 +9,8 @@ import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.R2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.text.Editable;
 import android.view.View;

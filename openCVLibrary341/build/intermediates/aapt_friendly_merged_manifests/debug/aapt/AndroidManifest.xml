@@ -6,8 +6,6 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="27" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
+        android:targetSdkVersion="29" />
 
 </manifest>

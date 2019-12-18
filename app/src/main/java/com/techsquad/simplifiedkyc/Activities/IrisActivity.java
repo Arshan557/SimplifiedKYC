@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +47,7 @@ import java.util.Locale;
 
 public class IrisActivity extends Activity implements CvCameraViewListener2 {
 
+    private static final String TAG = "IrisActivity";
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
     public static final int JAVA_DETECTOR = 0;
     private static final int TM_SQDIFF = 0;
@@ -371,6 +373,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
                     countDownTimer.pause();
             }
         } else {
+            Log.d(TAG, "Faces captured: " + facesArray.length);
             if(!isFinished) {
                 if (toneMP.isPlaying())
                     toneMP.stop();

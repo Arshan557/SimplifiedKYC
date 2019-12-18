@@ -2,6 +2,7 @@ package com.techsquad.simplifiedkyc.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.techsquad.simplifiedkyc.R;
@@ -24,6 +28,7 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 555;
     @BindView(R2.id.input_email) EditText _emailText;
     @BindView(R2.id.input_password) EditText _passwordText;
     @BindView(R2.id.btn_login) MaterialButton _loginButton;
@@ -43,6 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        boolean hasNoCameraAccess = (ContextCompat.checkSelfPermission(LoginActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED);
+        Log.d("hasPermission: " , "" + hasNoCameraAccess);
+        if (hasNoCameraAccess) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
