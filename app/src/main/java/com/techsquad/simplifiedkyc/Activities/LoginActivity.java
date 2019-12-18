@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 555;
+    private static final int REQUEST_WRITE_STORAGE = 1;
     @BindView(R2.id.input_email) EditText _emailText;
     @BindView(R2.id.input_password) EditText _passwordText;
     @BindView(R2.id.btn_login) MaterialButton _loginButton;
@@ -50,9 +51,16 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         boolean hasNoCameraAccess = (ContextCompat.checkSelfPermission(LoginActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED);
-        Log.d("hasPermission: " , "" + hasNoCameraAccess);
+        //Log.d("hasPermission: " , "" + hasNoCameraAccess);
         if (hasNoCameraAccess) {
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        }
+
+        boolean hasPermissionToWriteExternalStorage = (ContextCompat.checkSelfPermission(LoginActivity.this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermissionToWriteExternalStorage) {
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
         }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {

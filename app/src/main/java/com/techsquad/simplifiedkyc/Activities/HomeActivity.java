@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
 
+
 public class HomeActivity extends AppCompatActivity {
 
     @BindView(R2.id.aadharNumberEditText) EditText aadharNumber;
@@ -40,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String KEY_NAME = "kyc";
     private Cipher cipher;
     private TextView textView;
+    public static int SPLASH_TIME_OUT = 2000;
 
     private static final int CARD_NUMBER_TOTAL_SYMBOLS = 14; // size of pattern 0000-0000-0000
     private static final int CARD_NUMBER_TOTAL_DIGITS = 12; // max numbers of digits in pattern: 0000 x 3
@@ -108,6 +111,22 @@ public class HomeActivity extends AppCompatActivity {
                 submitDetails();
             }
         });
+    }
+
+    private void runApp() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                Intent introIntent = new Intent(SplashActivity.this, fdActivity.class);
+                Intent introIntent = new Intent(HomeActivity.this, SplashActivity.class);
+                Bundle b = getIntent().getExtras();
+                String secs = b.getString("minutes");
+                introIntent.putExtra("minutes", secs);
+                startActivity(introIntent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                finish();
+            }
+        }, SPLASH_TIME_OUT);
     }
 
     public void submitDetails() {

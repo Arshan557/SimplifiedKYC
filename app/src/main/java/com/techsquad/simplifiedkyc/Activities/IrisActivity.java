@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,7 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techsquad.simplifiedkyc.CountDownTimerWithPause;
+import com.techsquad.simplifiedkyc.OpenCameraView;
 import com.techsquad.simplifiedkyc.R;
+import com.techsquad.simplifiedkyc.Utils.Constants;
+import com.techsquad.simplifiedkyc.Utils.FolderUtil;
+import com.techsquad.simplifiedkyc.Utils.Utilities;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -45,7 +50,7 @@ import java.io.InputStream;
 import java.util.Locale;
 
 
-public class IrisActivity extends Activity implements CvCameraViewListener2 {
+public class IrisActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "IrisActivity";
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
@@ -71,7 +76,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
     private MenuItem mItemFace40;
     private MenuItem mItemFace30;
     private MenuItem mItemFace20;
-    
+
     private Mat mRgba;
     private Mat mGray;
     private File mCascadeFile;
@@ -88,6 +93,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
     private int mAbsoluteFaceSize = 0;
 
     private CameraBridgeViewBase mOpenCvCameraView;
+    private OpenCameraView cameraBridgeViewBase;
     private SeekBar mMethodSeekbar;
     private TextView mValue;
 
@@ -98,7 +104,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
 
     MediaPlayer toneMP;
     private boolean isFinished;
-    
+
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
@@ -162,15 +168,10 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(IrisActivity.this, HomeActivity.class);
-        startActivity(intent);
-        finish();
-        /*super.onBackPressed();
-        if(countDownTimer != null) {
-            countDownTimer.cancel();
-        }
+        super.onBackPressed();
+        countDownTimer.cancel();
         mTimeLeftInMillis = 0;
-        isFinished = false;*/
+        isFinished = false;
     }
 
     private void updateTimerUI(Long milliSeconds) {
@@ -193,26 +194,20 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
                         @Override
                         public void onFinish() {
                             updateTimerUI(0L);
-                            /*AlertDialog alertDialog = new AlertDialog.Builder(IrisActivity.this).create();
-                            alertDialog.setTitle("Iris Captured");
-                            alertDialog.setIcon(R.drawable.antivirus);
-                            alertDialog.setMessage("Your IRIS has captured successfully, you will be redirected to main page.");
+                           /* AlertDialog alertDialog = new AlertDialog.Builder(IrisActivity.this).create();
+                            alertDialog.setTitle("Light Me");
+                            alertDialog.setIcon(R.drawable.iris);
+                            alertDialog.setMessage("Your session has ended, you will be redirected to main page.");
                             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
-                                            //System.exit(1);
+                                            System.exit(1);
                                         }
                                     });
                             alertDialog.show();*/
-                            Toast.makeText(getApplicationContext(), "Your IRIS has been captured successfully", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(IrisActivity.this, HomeActivity.class);
-                            intent.putExtra("irisData", "1234567890");
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            finish();
                             isFinished = true;
-                            }
+                        }
                     }.create();
                 }
             }
@@ -236,7 +231,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
         toneMP = MediaPlayer.create(getApplicationContext(), R.raw.tone);
 
         isFinished = false;
-        
+
         showTime = findViewById(R.id.text_view_countdown);
         Bundle b = getIntent().getExtras();
         String secs = b.getString("minutes");
@@ -247,7 +242,8 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
         mTimeLeftInMillis = secsToTerminate;
         updateTimerUI(mTimeLeftInMillis);
 
-        mOpenCvCameraView = findViewById(R.id.fd_activity_surface_view);
+        mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.fd_activity_surface_view);
+        mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
 
         mMethodSeekbar = findViewById(R.id.methodSeekBar);
@@ -373,15 +369,14 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
                     countDownTimer.pause();
             }
         } else {
-            Log.d(TAG, "Faces captured: " + facesArray.length);
             if(!isFinished) {
                 if (toneMP.isPlaying())
                     toneMP.stop();
-                
+
                 if (countDownTimer == null)
                     startTimer();
                 else if (countDownTimer != null)
-                    countDownTimer.resume();   
+                    countDownTimer.resume();
             }
         }
 
@@ -411,7 +406,26 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
             } else if (learn_frames == 10) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "I am ready.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "I am ready.", Toast.LENGTH_SHORT).show();
+
+                        cameraBridgeViewBase = (OpenCameraView) findViewById(R.id.fd_activity_surface_view);
+                        cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
+                        cameraBridgeViewBase.setCvCameraViewListener(IrisActivity.this);
+                        cameraBridgeViewBase.disableFpsMeter();
+
+                        String outPicture = Constants.SCAN_IMAGE_LOCATION + File.separator + Utilities.generateFilename();
+                        FolderUtil.createDefaultFolder(Constants.SCAN_IMAGE_LOCATION);
+
+                        cameraBridgeViewBase.takePicture(outPicture);
+                        //Toast.makeText(IrisActivity.this, "Picture has been taken ", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "Path " + outPicture);
+
+                        Toast.makeText(getApplicationContext(), "Your IRIS has been captured successfully", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(IrisActivity.this, HomeActivity.class);
+                        intent.putExtra("irisFinish", "yes");
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
                     }
                 });
                 learn_frames++;
@@ -420,6 +434,9 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
                 match_eye(eyearea_left, teplateL, method);
             }
         }
+        Mat mRgbaT = mRgba.t();
+        Core.flip(mRgba.t(), mRgbaT, 1);
+        Imgproc.resize(mRgbaT, mRgbaT, mRgba.size());
         return mRgba;
     }
 
@@ -479,6 +496,7 @@ public class IrisActivity extends Activity implements CvCameraViewListener2 {
                 return;
             }
             Mat mResult = new Mat(result_cols, result_rows, CvType.CV_8U);
+            Log.d("fdActivity_mResult: ",""+mResult.toString());
 
             switch (type) {
                 case TM_SQDIFF:
