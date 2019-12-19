@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="56dp"
+        android:background="#26a69a"
+        android:paddingLeft="24dp"
+        android:focusableInTouchMode="true"
+        android:paddingRight="24dp">
+
+        <ImageView android:src="@drawable/ic_launcher_green"
+            android:layout_width="@dimen/logo_dimen"
+            android:layout_height="@dimen/logo_dimen"
+            android:layout_marginBottom="14dp"
+            android:id="@+id/user_photo"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/aadharNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aadhar number"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <EditText android:id="@+id/user_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="DOB" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:text="gender"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText android:id="@+id/user_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Mobile Number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="ADDRESS"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:textSize="16dip"/>
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:paddingBottom="20dp"
+            android:text="ADDRESS"
+            android:gravity="left"
+            android:textSize="14dip"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verify and Submit"
+            android:id="@+id/btn_submit"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:cornerRadius="10dp"
+            app:backgroundTint="#3f974b"
+            app:backgroundTintMode="multiply"
+            app:rippleColor="#ffee33"
+            android:theme="@style/AppThemeButton"
+            app:strokeColor="#8edea7"
+            app:strokeWidth="2dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/white"
+            android:text="If details are not matching, contact our customer suppport"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="16dip"/>
+
+    </LinearLayout>
+</ScrollView>

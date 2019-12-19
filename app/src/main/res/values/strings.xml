@@ -5,7 +5,8 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_login_activities">LoginActivities</string>
-
+    <string name="title_activity_userform">UserformActivity</string>
+    <string name="title_activity_kycdone">KycdoneActivity</string>
 
 
 </resources>

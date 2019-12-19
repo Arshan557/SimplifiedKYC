@@ -1,6 +1,8 @@
 package com.techsquad.simplifiedkyc.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -14,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,12 +35,11 @@ import butterknife.OnTextChanged;
 public class HomeActivity extends AppCompatActivity {
 
     @BindView(R2.id.aadharNumberEditText) EditText aadharNumber;
-    @BindView(R2.id.btn_submit) MaterialButton btn_submit;
+    @BindView(R2.id.btn_proceed) MaterialButton btn_proceed;
     @BindView(R2.id.irisImage) ImageView irisImage;
 
-    String aadharNum = "";
-    String irisData = "";
-    private KeyStore keyStore;
+    String irisData;
+    //private KeyStore keyStore;
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "kyc";
     private Cipher cipher;
@@ -58,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         if(b != null && !b.isEmpty()) {
-            String irisData = b.getString("irisData");
+            irisData = b.getString("irisData");
         }
 
         // Initializing both Android Keyguard Manager and Fingerprint Manager
@@ -105,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        btn_submit.setOnClickListener(new View.OnClickListener() {
+        btn_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitDetails();
@@ -113,29 +115,21 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void runApp() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                Intent introIntent = new Intent(SplashActivity.this, fdActivity.class);
-                Intent introIntent = new Intent(HomeActivity.this, SplashActivity.class);
-                Bundle b = getIntent().getExtras();
-                String secs = b.getString("minutes");
-                introIntent.putExtra("minutes", secs);
-                startActivity(introIntent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
-    }
-
     public void submitDetails() {
-        aadharNum = aadharNumber.getText().toString();
-        Toast.makeText(getBaseContext(), aadharNum + " and " + irisData + " will be submitted shortly", Toast.LENGTH_LONG).show();
-        /*Intent i = new Intent(HomeActivity.this, SplashActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
-        finish();*/
+        String aadharNum = aadharNumber.getText().toString();
+        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("aadharNum", aadharNum);
+        editor.commit();
+        Log.d("aadharNum: ", aadharNum);
+        if(!aadharNum.isEmpty()) {
+            Intent i = new Intent(HomeActivity.this, UserformActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        } else {
+            Toast.makeText(getBaseContext(),  "Something went wrong. Plz try again!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnTextChanged(value = R.id.aadharNumberEditText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)

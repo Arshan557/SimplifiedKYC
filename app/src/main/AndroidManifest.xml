@@ -10,11 +10,9 @@
         android:resizeable="true"
         android:smallScreens="true" />
 
-
     <uses-permission
         android:name="android.permission.CAMERA"
         android:required="true" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -35,8 +33,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
-
-
     <dist:module dist:instant="true" />
 
     <application
@@ -47,27 +43,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity
+            android:name=".Activities.KycdoneActivity"
+            android:label="@string/title_activity_kycdone"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.UserformActivity"
+            android:label="@string/title_activity_userform"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Activities.SignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashScreen"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" >
-            <!--<intent-filter>
+            android:screenOrientation="portrait">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
-
         <activity android:name=".Activities.SplashActivity" />
         <activity android:name=".Activities.IrisActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Activities.HomeActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
         </activity>
-
         <activity
             android:name=".Activities.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -77,20 +79,18 @@
             android:name=".Activities.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
+            android:theme="@style/AppTheme.NoActionBar">
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".Activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

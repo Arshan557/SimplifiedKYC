@@ -56,7 +56,7 @@
             android:src="@drawable/iris" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_submit"
+            android:id="@+id/btn_proceed"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -1,10 +1,9 @@
 package com.techsquad.simplifiedkyc.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,19 +15,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.techsquad.simplifiedkyc.CountDownTimerWithPause;
 import com.techsquad.simplifiedkyc.OpenCameraView;
 import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.Utils.Constants;
 import com.techsquad.simplifiedkyc.Utils.FolderUtil;
-import com.techsquad.simplifiedkyc.Utils.Utilities;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -47,6 +43,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -412,20 +410,29 @@ public class IrisActivity extends Activity implements CameraBridgeViewBase.CvCam
                         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
                         cameraBridgeViewBase.setCvCameraViewListener(IrisActivity.this);
                         cameraBridgeViewBase.disableFpsMeter();
-
-                        String outPicture = Constants.SCAN_IMAGE_LOCATION + File.separator + Utilities.generateFilename();
+                        String userName = "";
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                        if (null != sharedPreferences) {
+                            userName = sharedPreferences.getString("fname", "");
+                        }
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+                        String fileName = userName + sdf.format(new Date()) + ".jpg";
+                        String outPicture = Constants.SCAN_IMAGE_LOCATION + File.separator + fileName;
                         FolderUtil.createDefaultFolder(Constants.SCAN_IMAGE_LOCATION);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("fileName", fileName);
+                        editor.commit();
 
                         cameraBridgeViewBase.takePicture(outPicture);
                         //Toast.makeText(IrisActivity.this, "Picture has been taken ", Toast.LENGTH_LONG).show();
                         Log.d(TAG, "Path " + outPicture);
 
-                        Toast.makeText(getApplicationContext(), "Your IRIS has been captured successfully", Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(getApplicationContext(), "Your IRIS has been captured successfully", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(IrisActivity.this, HomeActivity.class);
                         intent.putExtra("irisFinish", "yes");
                         startActivity(intent);
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        finish();
+                        finish();*/
                     }
                 });
                 learn_frames++;

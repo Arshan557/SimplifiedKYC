@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#26a69a"
+    android:fitsSystemWindows="true"
+    tools:context=".Activities.KycdoneActivity">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:text="Congratulations! Your KYC has been done successfully"
+        android:textColor="@color/white"
+        android:textSize="16dip"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="@dimen/logo_dimen"
+        android:layout_height="@dimen/logo_dimen"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_launcher_green" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textStyle="italic"
+        android:text="Logout"
+        android:textSize="30dp"
+        android:theme="@style/AppThemeButton"
+        app:backgroundTint="#3f974b"
+        app:backgroundTintMode="multiply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="#ffee33"
+        app:strokeColor="#8edea7"
+        app:strokeWidth="2dp" />
+
+</RelativeLayout>

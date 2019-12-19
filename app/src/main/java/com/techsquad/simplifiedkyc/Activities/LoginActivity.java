@@ -2,11 +2,13 @@ package com.techsquad.simplifiedkyc.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -30,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 555;
     private static final int REQUEST_WRITE_STORAGE = 1;
-    @BindView(R2.id.input_email) EditText _emailText;
+    @BindView(R2.id.input_mobile) EditText mobileNum;
     @BindView(R2.id.input_password) EditText _passwordText;
     @BindView(R2.id.btn_login) MaterialButton _loginButton;
     @BindView(R2.id.forgot_pwd) TextView _forgotLink;
@@ -40,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean mobileNwInfo = false;
 
-    String email = null;
+    String mobileNumber = null;
     String password = null;
     boolean isRemembered = false;
 
@@ -99,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        email = _emailText.getText().toString();
+        mobileNumber = mobileNum.getText().toString();
         password = _passwordText.getText().toString();
         isRemembered = _rememberChecked.isChecked();
 
@@ -110,14 +112,14 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
+        String mobile = mobileNum.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("Enter a valid email address");
+        if (mobile.isEmpty() || !Patterns.PHONE.matcher(mobile).matches()) {
+            mobileNum.setError("Enter a valid mobile number");
             valid = false;
         } else {
-            _emailText.setError(null);
+            mobileNum.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
@@ -164,8 +166,33 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             //String finalUrl = Constants.AUTH_URL+"?uname="+email+"&password="+password;
             //new Authenticate().execute(finalUrl);
-            if(email.equalsIgnoreCase("sudha@email.com") && password.equalsIgnoreCase("sudha123")) {
+            if(mobileNumber.equalsIgnoreCase("8106886588") && password.equalsIgnoreCase("sudha123")) {
+                //Shared preferences
+                SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("fname", "Sudarshan vallepu");
+                editor.putString("gender", "Male");
+                editor.putString("mobile", "8106886588");
+                editor.putString("dob", "21-03-1993");
+                editor.putString("address", "Pulivendula(M), Kadapa(Dist), Andhra Pradesh - 516390");
+                /*if (isRemembered) {
+                    editor.putString("rememberFlag", "Y");
+                    Log.d("isRemembered","true");
+                } else {
+                    editor.putString("rememberFlag", "N");
+                    Log.d("isRemembered","false");
+                }*/
+                editor.commit();
+
                 Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+               /* Bundle bundle = new Bundle();
+                bundle.putString("fname",fname);
+                bundle.putString("lname",lname);
+                bundle.putString("apikey",apikey);
+                if (!profilePic.equalsIgnoreCase("")) {
+                    bundle.putString("profilePic", profilePic);
+                }
+                i.putExtras(bundle);*/
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();

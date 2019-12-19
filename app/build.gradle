@@ -36,7 +36,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation project(':openCVLibrary341')
-    implementation ('com.ankushgrover:Hourglass:2.0.0')
+    implementation('com.ankushgrover:Hourglass:2.0.0')
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
