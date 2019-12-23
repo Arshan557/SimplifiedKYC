@@ -15,5 +15,6 @@ public class Constants {
         }
 
         public static final String SCAN_IMAGE_LOCATION = Environment.getExternalStorageDirectory() + File.separator + "eKYC";
+        public static final String AUTH_URL = "http://myinvent.000webhostapp.com/mobile/login";
 
 }

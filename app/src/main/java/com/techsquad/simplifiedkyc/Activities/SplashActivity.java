@@ -1,7 +1,9 @@
 package com.techsquad.simplifiedkyc.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
@@ -26,6 +28,10 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                SharedPreferences preferencesUserData = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorUserData = preferencesUserData.edit();
+                editorUserData.clear();
+                editorUserData.commit();
                 int userInput = Integer.parseInt("5") * 1000;
                 int minutes = (int) (userInput / 1000) / 60;
                 int seconds = (int) (userInput / 1000) % 60;

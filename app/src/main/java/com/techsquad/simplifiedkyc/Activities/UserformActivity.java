@@ -80,6 +80,13 @@ public class UserformActivity extends AppCompatActivity {
             user_photo.setImageBitmap(myBitmap);
         };
 
+        //Disabling fields
+        user_name.setEnabled(false);
+        gender.setEnabled(false);
+        user_mobile.setEnabled(false);
+        user_dob.setEnabled(false);
+        user_address.setEnabled(false);
+
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

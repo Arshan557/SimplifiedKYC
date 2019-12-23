@@ -1,11 +1,15 @@
 package com.techsquad.simplifiedkyc.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -22,8 +26,16 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.techsquad.simplifiedkyc.Network.HttpHandler;
 import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.R2;
+import com.techsquad.simplifiedkyc.Utils.Constants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 555;
     private static final int REQUEST_WRITE_STORAGE = 1;
+    private ProgressDialog pDialog;
     @BindView(R2.id.input_mobile) EditText mobileNum;
     @BindView(R2.id.input_password) EditText _passwordText;
     @BindView(R2.id.btn_login) MaterialButton _loginButton;
@@ -44,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 
     String mobileNumber = null;
     String password = null;
-    boolean isRemembered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mobileNumber = mobileNum.getText().toString();
         password = _passwordText.getText().toString();
-        isRemembered = _rememberChecked.isChecked();
+        //isRemembered = _rememberChecked.isChecked();
 
         onLoginSuccess();
 
@@ -165,8 +177,9 @@ public class LoginActivity extends AppCompatActivity {
             snackbar.show();
         } else {
             //String finalUrl = Constants.AUTH_URL+"?uname="+email+"&password="+password;
-            //new Authenticate().execute(finalUrl);
-            if(mobileNumber.equalsIgnoreCase("8106886588") && password.equalsIgnoreCase("sudha123")) {
+            String finalUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=7c8d432c22ba4501bd29d6e85ae68d56";
+            new Authenticate().execute(finalUrl);
+            /*if(mobileNumber.equalsIgnoreCase("8106886588") && password.equalsIgnoreCase("sudha123")) {
                 //Shared preferences
                 SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -175,31 +188,139 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("mobile", "8106886588");
                 editor.putString("dob", "21-03-1993");
                 editor.putString("address", "Pulivendula(M), Kadapa(Dist), Andhra Pradesh - 516390");
-                /*if (isRemembered) {
+                *//*if (isRemembered) {
                     editor.putString("rememberFlag", "Y");
                     Log.d("isRemembered","true");
                 } else {
                     editor.putString("rememberFlag", "N");
                     Log.d("isRemembered","false");
-                }*/
+                }*//*
                 editor.commit();
 
                 Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-               /* Bundle bundle = new Bundle();
+               *//* Bundle bundle = new Bundle();
                 bundle.putString("fname",fname);
                 bundle.putString("lname",lname);
                 bundle.putString("apikey",apikey);
                 if (!profilePic.equalsIgnoreCase("")) {
                     bundle.putString("profilePic", profilePic);
                 }
-                i.putExtras(bundle);*/
+                i.putExtras(bundle);*//*
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
             } else {
                 onLoginFailed();
-            }
+            }*/
         }
+    }
+
+    private class Authenticate extends AsyncTask<String, String, String> {
+        String status = "", msg = "";
+        String fname,lname,apikey,profilePic,phone,gender,id,uname,mobile,addressId,companyid = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(LoginActivity.this);
+            pDialog.setMessage("Authenticating...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+        @Override
+        protected String doInBackground(String... f_url) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String jsonStr = sh.makeServiceCall(f_url[0]);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    // Getting JSON Array node
+                    JSONArray news = jsonObj.getJSONArray("articles");
+
+                    // looping through All News
+                    for (int i = 0; i < news.length(); i++) {
+                        JSONObject c = news.getJSONObject(i);
+
+                        String title = c.getString("title");
+
+                        //Shared preferences
+                       /* SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("fname", fname);
+                        editor.putString("id", id);
+                        editor.putString("uname", uname);
+                        editor.putString("gender", gender);
+                        editor.putString("mobile", mobile);
+                        editor.putString("addressId", addressId);
+                        editor.putString("companyid", companyid);
+                        editor.putString("lname", lname);
+                        editor.putString("password", password);
+                        editor.putString("apikey", apikey);
+                        editor.putString("profilePic", profilePic);
+                        editor.putString("phone", phone);
+                        editor.putString("apigenderkey", gender);
+                        editor.putString("apigenderkey", gender);
+                        if (isRemembered) {
+                            editor.putString("rememberFlag", "Y");
+                            Log.d("isRemembered","true");
+                        } else {
+                            editor.putString("rememberFlag", "N");
+                            Log.d("isRemembered","false");
+                        }
+                        editor.commit();*/
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Something went wrong. Try again" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, "MalformedURLException " + e.getMessage());
+                    if (null != msg) {
+                        Snackbar snackbar = Snackbar.make(_parentRelative, msg, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    } else {
+                        Snackbar snackbar = Snackbar.make(_parentRelative, "Invalid Username/Password", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("fname","Sudarshan");
+            i.putExtras(bundle);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+
+        }
+
     }
 
     public void onLoginFailed() {

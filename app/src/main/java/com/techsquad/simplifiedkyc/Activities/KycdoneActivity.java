@@ -1,6 +1,8 @@
 package com.techsquad.simplifiedkyc.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.button.MaterialButton;
@@ -38,6 +40,10 @@ public class KycdoneActivity extends AppCompatActivity {
     }
 
     public void logout() {
+        SharedPreferences preferencesUserData = getApplicationContext().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorUserData = preferencesUserData.edit();
+        editorUserData.clear();
+        editorUserData.commit();
         Toast.makeText(getBaseContext(), "You'll be logging out ", Toast.LENGTH_LONG).show();
         Intent i = new Intent(KycdoneActivity.this, LoginActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
