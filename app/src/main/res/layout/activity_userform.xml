@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/parentRelative"
+    android:background="#26a69a"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -88,6 +89,7 @@
             android:layout_marginBottom="4dp"
             android:text="ADDRESS"
             android:textStyle="bold"
+            android:paddingBottom="8dp"
             android:gravity="left"
             android:textSize="16dip"/>
 
@@ -100,6 +102,17 @@
             android:text="ADDRESS"
             android:gravity="left"
             android:textSize="14dip"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText android:id="@+id/user_pan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="PAN " />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -121,6 +134,7 @@
             android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
 
         <TextView
             android:layout_width="fill_parent"
@@ -130,7 +144,7 @@
             android:text="If details are not matching, contact our customer suppport"
             android:textStyle="bold"
             android:gravity="center"
+            android:layout_alignParentBottom="true"
             android:textSize="16dip"/>
 
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

@@ -32,6 +32,17 @@ public class SplashActivity extends Activity {
                 SharedPreferences.Editor editorUserData = preferencesUserData.edit();
                 editorUserData.clear();
                 editorUserData.commit();
+
+                SharedPreferences preferencesAadharData = getApplicationContext().getSharedPreferences("AadharData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorAadharData = preferencesAadharData.edit();
+                editorAadharData.clear();
+                editorAadharData.commit();
+
+                SharedPreferences preferencesPANData = getApplicationContext().getSharedPreferences("PANData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editorPANData = preferencesPANData.edit();
+                editorPANData.clear();
+                editorPANData.commit();
+
                 int userInput = Integer.parseInt("5") * 1000;
                 int minutes = (int) (userInput / 1000) / 60;
                 int seconds = (int) (userInput / 1000) % 60;

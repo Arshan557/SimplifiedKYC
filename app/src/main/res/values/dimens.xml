@@ -11,7 +11,7 @@
     <dimen name="desc_padding">40dp</dimen>
     <dimen name="ic_clear_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="logo_dimen">100dp</dimen>
+    <dimen name="logo_dimen">150dp</dimen>
     <dimen name="settled_purchase_font">20dp</dimen>
 
     <dimen name="button_margin_top">50dp</dimen>

@@ -39,7 +39,7 @@
             android:paddingRight="24dp"
             android:text="Sudarshan"
             android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="17dip"
+            android:textSize="25dip"
             android:textStyle="bold" />
 
         <TextView

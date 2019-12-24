@@ -15,6 +15,8 @@ public class Constants {
         }
 
         public static final String SCAN_IMAGE_LOCATION = Environment.getExternalStorageDirectory() + File.separator + "eKYC";
-        public static final String AUTH_URL = "http://myinvent.000webhostapp.com/mobile/login";
+        public static final String SERVICE_URL = "http://192.168.43.60:8080/user/";
+        public static final String AADHAR_URL = "http://192.168.43.221:8080/kyc/getAadhar/";
+        public static final String PAN_URL = "http://192.168.43.221:8080/kyc/getPAN/";
 
 }

@@ -65,16 +65,23 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         boolean hasNoCameraAccess = (ContextCompat.checkSelfPermission(LoginActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED);
-        //Log.d("hasPermission: " , "" + hasNoCameraAccess);
+        Log.d("hasPermission: " , "" + hasNoCameraAccess);
         if (hasNoCameraAccess) {
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
 
         boolean hasPermissionToWriteExternalStorage = (ContextCompat.checkSelfPermission(LoginActivity.this,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        Log.d("hasWrteExternalStorage:" , "" + hasPermissionToWriteExternalStorage);
         if (!hasPermissionToWriteExternalStorage) {
-            ActivityCompat.requestPermissions(LoginActivity.this,
-                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
+        }
+
+        boolean hasPermissionToReadExternalStorage = (ContextCompat.checkSelfPermission(LoginActivity.this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        Log.d("hasReadExternalStorage:" , "" + hasPermissionToWriteExternalStorage);
+        if (!hasPermissionToWriteExternalStorage) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
         }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -106,28 +113,21 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
+        mobileNumber = mobileNum.getText().toString();
+        password = _passwordText.getText().toString();
+
         if (!validate()) {
             onLoginFailed();
             return;
         }
-
         _loginButton.setEnabled(false);
-
-        mobileNumber = mobileNum.getText().toString();
-        password = _passwordText.getText().toString();
-        //isRemembered = _rememberChecked.isChecked();
-
         onLoginSuccess();
-
     }
 
     public boolean validate() {
         boolean valid = true;
 
-        String mobile = mobileNum.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        if (mobile.isEmpty() || !Patterns.PHONE.matcher(mobile).matches()) {
+        if (mobileNumber.isEmpty() || !Patterns.PHONE.matcher(mobileNumber).matches()) {
             mobileNum.setError("Enter a valid mobile number");
             valid = false;
         } else {
@@ -160,13 +160,6 @@ public class LoginActivity extends AppCompatActivity {
                     .setAction("SETTINGS", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            /*if(mnwI == true) {
-                                Snackbar snackbar1 = Snackbar.make(_parentRelative, "Connected", Snackbar.LENGTH_SHORT);
-                                snackbar1.show();
-                            } else {
-                                Snackbar snackbar = Snackbar.make(_parentRelative, "Sorry! Not yet connected", Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                            }*/
                             startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                         }
                     });
@@ -176,48 +169,14 @@ public class LoginActivity extends AppCompatActivity {
 
             snackbar.show();
         } else {
-            //String finalUrl = Constants.AUTH_URL+"?uname="+email+"&password="+password;
-            String finalUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=7c8d432c22ba4501bd29d6e85ae68d56";
+            String finalUrl = Constants.SERVICE_URL + mobileNumber + "/" + password;
             new Authenticate().execute(finalUrl);
-            /*if(mobileNumber.equalsIgnoreCase("8106886588") && password.equalsIgnoreCase("sudha123")) {
-                //Shared preferences
-                SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("fname", "Sudarshan vallepu");
-                editor.putString("gender", "Male");
-                editor.putString("mobile", "8106886588");
-                editor.putString("dob", "21-03-1993");
-                editor.putString("address", "Pulivendula(M), Kadapa(Dist), Andhra Pradesh - 516390");
-                *//*if (isRemembered) {
-                    editor.putString("rememberFlag", "Y");
-                    Log.d("isRemembered","true");
-                } else {
-                    editor.putString("rememberFlag", "N");
-                    Log.d("isRemembered","false");
-                }*//*
-                editor.commit();
-
-                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-               *//* Bundle bundle = new Bundle();
-                bundle.putString("fname",fname);
-                bundle.putString("lname",lname);
-                bundle.putString("apikey",apikey);
-                if (!profilePic.equalsIgnoreCase("")) {
-                    bundle.putString("profilePic", profilePic);
-                }
-                i.putExtras(bundle);*//*
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-                finish();
-            } else {
-                onLoginFailed();
-            }*/
         }
     }
 
     private class Authenticate extends AsyncTask<String, String, String> {
-        String status = "", msg = "";
-        String fname,lname,apikey,profilePic,phone,gender,id,uname,mobile,addressId,companyid = null;
+        boolean status = false;
+        String userNameStr, passwordStr, userIdStr, emailStr, mobileStr, kyccompletedStr  = "";
 
         @Override
         protected void onPreExecute() {
@@ -239,41 +198,29 @@ public class LoginActivity extends AppCompatActivity {
             if (jsonStr != null) {
 
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
                     // Getting JSON Array node
-                    JSONArray news = jsonObj.getJSONArray("articles");
+                    JSONObject c = new JSONObject(jsonStr);
+                    // looping through All data
+                    if(c != null) {
+                        status = true;
+                            userNameStr = c.getString("userName");
+                            passwordStr = c.getString("password");
+                            userIdStr = c.getString("userId");
+                            emailStr = c.getString("email");
+                            mobileStr = c.getString("mobile");
+                            kyccompletedStr = c.getString("kyccompleted");
 
-                    // looping through All News
-                    for (int i = 0; i < news.length(); i++) {
-                        JSONObject c = news.getJSONObject(i);
+                            //Shared preferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userNameSP", userNameStr);
+                            editor.putString("passwordSP", passwordStr);
+                            editor.putString("userIdSP", userIdStr);
+                            editor.putString("emailSP", emailStr);
+                            editor.putString("mobileSP", mobileStr);
+                            editor.putString("kyccompletedSP", kyccompletedStr);
+                            editor.commit();
 
-                        String title = c.getString("title");
-
-                        //Shared preferences
-                       /* SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("fname", fname);
-                        editor.putString("id", id);
-                        editor.putString("uname", uname);
-                        editor.putString("gender", gender);
-                        editor.putString("mobile", mobile);
-                        editor.putString("addressId", addressId);
-                        editor.putString("companyid", companyid);
-                        editor.putString("lname", lname);
-                        editor.putString("password", password);
-                        editor.putString("apikey", apikey);
-                        editor.putString("profilePic", profilePic);
-                        editor.putString("phone", phone);
-                        editor.putString("apigenderkey", gender);
-                        editor.putString("apigenderkey", gender);
-                        if (isRemembered) {
-                            editor.putString("rememberFlag", "Y");
-                            Log.d("isRemembered","true");
-                        } else {
-                            editor.putString("rememberFlag", "N");
-                            Log.d("isRemembered","false");
-                        }
-                        editor.commit();*/
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -285,13 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 } catch (Exception e) {
                     Log.e(TAG, "MalformedURLException " + e.getMessage());
-                    if (null != msg) {
-                        Snackbar snackbar = Snackbar.make(_parentRelative, msg, Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    } else {
-                        Snackbar snackbar = Snackbar.make(_parentRelative, "Invalid Username/Password", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
+                    Toast.makeText(getApplicationContext(), "Something went wrong. Try again" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
@@ -311,16 +252,22 @@ public class LoginActivity extends AppCompatActivity {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("fname","Sudarshan");
-            i.putExtras(bundle);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
-
+            if(status) {
+                if(kyccompletedStr.equalsIgnoreCase("true")) {
+                    Toast.makeText(getApplicationContext(),"Your KYC has been completed already.", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("fname", userNameStr);
+                    i.putExtras(bundle);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                    finish();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(),"Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            }
         }
-
     }
 
     public void onLoginFailed() {

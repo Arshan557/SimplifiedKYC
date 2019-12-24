@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.techsquad.simplifiedkyc.Network.HttpHandler;
 import com.techsquad.simplifiedkyc.R;
 import com.techsquad.simplifiedkyc.R2;
+import com.techsquad.simplifiedkyc.Utils.Constants;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -49,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
 
     String userName = "";
+    String aadharNum = "";
     //private KeyStore keyStore;
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "kyc";
@@ -75,40 +77,6 @@ public class HomeActivity extends AppCompatActivity {
 
         user_name.setText(userName);
 
-        // Initializing both Android Keyguard Manager and Fingerprint Manager
-        /*KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-
-        // Check whether the device has a Fingerprint sensor.
-        if(!fingerprintManager.isHardwareDetected()){
-            Toast.makeText(getBaseContext(),  " Your mobile doesn't have fingerprint sensor", Toast.LENGTH_LONG).show();
-        } else {
-            // Checks whether fingerprint permission is set on manifest
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getBaseContext(),  " Fingerprint permission not enabled", Toast.LENGTH_LONG).show();
-            }else{
-                // Check whether at least one fingerprint is registered
-                if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    //textView.setText("Register at least one fingerprint in Settings");
-                    Toast.makeText(getBaseContext(),  " Register at least one fingerprint in Settings", Toast.LENGTH_LONG).show();
-                }else{
-                    // Checks whether lock screen security is enabled or not
-                    if (!keyguardManager.isKeyguardSecure()) {
-                        //textView.setText("Lock screen security not enabled in Settings");
-                        Toast.makeText(getBaseContext(),  " Lock screen security not enabled in Settings", Toast.LENGTH_LONG).show();
-                    }else{
-                        //generateKey();
-                        //if (cipherInit()) {
-                        if (true) {
-                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                            FingerPrintHandler helper = new FingerPrintHandler(this);
-                            helper.startAuth(fingerprintManager, cryptoObject);
-                        }
-                    }
-                }
-            }
-        }*/
-
         irisImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,27 +96,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void submitDetails() {
-        String aadharNum = aadharNumber.getText().toString();
-        SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("aadharNum", aadharNum);
-        editor.commit();
-        Log.d("aadharNum: ", aadharNum);
-        String finalUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=7c8d432c22ba4501bd29d6e85ae68d56";
-        new HomeActivity.Verify().execute(finalUrl);
-        /*if(!aadharNum.isEmpty()) {
-            Intent i = new Intent(HomeActivity.this, UserformActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
+        aadharNum = aadharNumber.getText().toString();
+        String aadharNumm = aadharNum.replaceAll("[-+.^:,]","");
+        Log.d("aadharNum: ", aadharNumm);
+        if(!aadharNum.isEmpty()) {
+            String finalUrl = Constants.AADHAR_URL + aadharNumm;
+            new HomeActivity.Verify().execute(finalUrl);
         } else {
             Toast.makeText(getBaseContext(),  "Something went wrong. Plz try again!", Toast.LENGTH_LONG).show();
-        }*/
+        }
     }
 
     private class Verify extends AsyncTask<String, String, String> {
-        String status = "", msg = "";
-        String fname,lname,apikey,profilePic,phone,gender,id,uname,mobile,addressId,companyid = null;
+        boolean status = false;
+        String uid, name, gender, dob, building, street, locality, district, state, pincode, address = "";
 
         @Override
         protected void onPreExecute() {
@@ -170,41 +131,34 @@ public class HomeActivity extends AppCompatActivity {
             if (jsonStr != null) {
 
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
                     // Getting JSON Array node
-                    JSONArray news = jsonObj.getJSONArray("articles");
+                    JSONObject c = new JSONObject(jsonStr);
+                    // looping through All data
+                    if(c != null) {
+                        uid = c.getString("uid");
+                        name = c.getString("name");
+                        gender = c.getString("gender");
+                        dob = c.getString("dob");
+                        building = c.getString("building");
+                        street = c.getString("street");
+                        locality = c.getString("locality");
+                        district = c.getString("district");
+                        state = c.getString("state");
+                        pincode = c.getString("pincode");
 
-                    // looping through All News
-                    for (int i = 0; i < news.length(); i++) {
-                        JSONObject c = news.getJSONObject(i);
-
-                        String title = c.getString("title");
+                        address = building + ", " + street + ", " + locality + ", " + district + ", " + state + " - " + pincode;
 
                         //Shared preferences
-                       /* SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = getSharedPreferences("AadharData", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("fname", fname);
-                        editor.putString("id", id);
-                        editor.putString("uname", uname);
-                        editor.putString("gender", gender);
-                        editor.putString("mobile", mobile);
-                        editor.putString("addressId", addressId);
-                        editor.putString("companyid", companyid);
-                        editor.putString("lname", lname);
-                        editor.putString("password", password);
-                        editor.putString("apikey", apikey);
-                        editor.putString("profilePic", profilePic);
-                        editor.putString("phone", phone);
-                        editor.putString("apigenderkey", gender);
-                        editor.putString("apigenderkey", gender);
-                        if (isRemembered) {
-                            editor.putString("rememberFlag", "Y");
-                            Log.d("isRemembered","true");
-                        } else {
-                            editor.putString("rememberFlag", "N");
-                            Log.d("isRemembered","false");
-                        }
-                        editor.commit();*/
+                        editor.putString("aadharNumSP", aadharNum);
+                        editor.putString("uidSP", uid);
+                        editor.putString("nameSP", name);
+                        editor.putString("genderSP", gender);
+                        editor.putString("dobSP", dob);
+                        editor.putString("addressSP", address);
+                        editor.commit();
+
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -236,16 +190,15 @@ public class HomeActivity extends AppCompatActivity {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            Intent i = new Intent(HomeActivity.this, UserformActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("fname","Sudarshan");
-            i.putExtras(bundle);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
-
+            if(name != null) {
+                Intent i = new Intent(HomeActivity.this, UserformActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(),"Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            }
         }
-
     }
 
     @OnTextChanged(value = R.id.aadharNumberEditText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)

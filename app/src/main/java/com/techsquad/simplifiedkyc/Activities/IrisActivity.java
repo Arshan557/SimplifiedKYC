@@ -413,7 +413,7 @@ public class IrisActivity extends Activity implements CameraBridgeViewBase.CvCam
                         String userName = "";
                         SharedPreferences sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
                         if (null != sharedPreferences) {
-                            userName = sharedPreferences.getString("fname", "");
+                            userName = sharedPreferences.getString("userNameSP", "");
                         }
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
                         String fileName = userName + sdf.format(new Date()) + ".jpg";
